@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assist-Tech Lab - 「人」が輝く未来の福祉を、AIと共に。</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Earthy Tones with a Calm Teal Accent -->
+    <!-- Application Structure Plan: プレゼンテーションの流れを踏襲した、縦スクロール型のシングルページアプリケーションを設計。ユーザーが物語を読むように自然に理解を深められる構成とした。1.ヒーローセクションで価値提案、2.課題の可視化、3.AIによる解決策の提示、4.タブ切り替えによるサービス詳細の対話的探索、5.チャートによる効果の定量的証明、6.図解による成功条件の説明、7.インタラクティブな料金表、8.CTAという流れ。この構造は、意思決定者である経営層が論理的に情報を追いやすく、かつ対話的な要素で飽きさせないことを目的としている。 -->
+    <!-- Visualization & Content Choices: 1.業務改善効果(スライド7) -> Goal:効果の定量的理解 -> Viz:棒グラフ(Chart.js) -> Interaction:スクロール連動アニメーション、ツールチップ -> Justification:Before/Afterを視覚的に比較させ、AI導入のインパクトを直感的に伝えるため。 2.参加条件(スライド9) -> Goal:ペア参加の重要性理解 -> Viz:HTML/CSSによる図解 -> Interaction:静的表示 -> Justification:「トップ」と「現場」が揃って初めて「変革」が成功するという構造を、複雑な描画ライブラリなしでシンプルかつ明確に示すため。 -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #fdfcfb;
+            color: #333;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .tab-active {
+            border-color: #0f766e; /* teal-700 */
+            background-color: #f0fdfa; /* teal-50 */
+            color: #0f766e; /* teal-700 */
+            font-weight: bold;
+        }
+        .plan-selected {
+            border-color: #0f766e; /* teal-700 */
+            transform: scale(1.03);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#hero" class="text-teal-700 font-bold text-2xl tracking-wide">
+                Assist-Tech Lab
+            </a>
+            <div>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkzi6SxllWaejYO1aAUpow1TalxpfXAxh7eqrjGQkHV8UhLg/viewform?usp=header" target="_blank" class="bg-teal-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors">個別相談はこちら</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="text-center py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-6">
+                <h1 class="text-3xl md:text-5xl font-bold text-slate-900 leading-tight">
+                    「人」が輝く未来の福祉を、<span class="text-teal-700">AI</span>と共に。
+                </h1>
+                <p class="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
+                    福祉で働く人と会社の<span class="font-bold text-teal-700">”余白”</span>を創出する、<br class="hidden md:inline">目標伴走型コミュニティ「Assist-Tech Lab」のご案内
+                </p>
+                <p class="mt-8 text-slate-600">
+                    多忙を極める福祉業界の皆様のために、AI技術を活用して<br class="hidden md:inline">「福祉倫理」を持った「時間のゆとり」という<span class="font-bold text-teal-700">”余白”</span>を生み出し、<br class="hidden md:inline">より良いケアと組織の未来を創造するための新しいご提案をさせていただきます。
+                </p>
+            </div>
+        </section>
+
+        <section id="problem" class="py-16 md:py-24 section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold">こんなお悩み、ありませんか？</h2>
+                    <p class="mt-2 text-slate-600">目の前の業務に追われ、未来への一歩が踏み出せない…</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-stone-200">
+                        <div class="text-4xl mb-4">⏱️</div>
+                        <h3 class="font-bold text-lg mb-2">慢性的な人手不足</h3>
+                        <p class="text-slate-600">現場はいつもギリギリの状態。職員の疲弊も激しく、質の高いケアに集中できない。</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-stone-200">
+                        <div class="text-4xl mb-4">🤔</div>
+                        <h3 class="font-bold text-lg mb-2">新しい取り組みへの壁</h3>
+                        <p class="text-slate-600">業務効率化の必要性は感じるが、何から手をつけていいか分からず、考える時間すらない。</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-stone-200">
+                        <div class="text-4xl mb-4">😥</div>
+                        <h3 class="font-bold text-lg mb-2">失われるやりがい</h3>
+                        <p class="text-slate-600">日々の業務に追われ続けることで職員がやりがいを見失い、離職の加速やサービスの質低下を招く。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="solution" class="py-16 md:py-24 bg-teal-50 section-fade-in">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-2xl md:text-3xl font-bold text-teal-900">解決の鍵は<br>「福祉倫理を持ったAI活用による”余白”の創出」</h2>
+                <p class="mt-4 text-lg text-slate-700 max-w-3xl mx-auto">煩雑な業務はAIに任せ、「人」にしかできない価値ある仕事へ</p>
+                <div class="mt-12 bg-white p-8 rounded-2xl shadow-xl max-w-4xl mx-auto">
+                    <p class="text-slate-600 mb-8">「AIなんて難しそう…」「ITに詳しい職員がいない…」ご安心ください。難しいシステム導入は不要です。<br>
+A.2週間に1回のAI導入の相談＆目標管理伴走と、B.福祉特化のAI活用動画集で、着実な業務効率化を支援します。</p>
+                    <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-8 text-2xl font-bold">
+                        <div class="relative">
+                            <span class="absolute -top-4 -left-4 text-sm font-normal text-slate-500">(例)</span>
+                            <span class="bg-amber-100 text-amber-800 px-4 py-2 rounded-lg">記録作成</span>
+                        </div>
+                        <span class="text-slate-400">→</span>
+                        <span class="bg-teal-100 text-teal-800 px-4 py-2 rounded-lg">🤖 AI</span>
+                        <span class="text-slate-400">→</span>
+                        <span class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-lg">”余白”創出</span>
+                    </div>
+                    <p class="mt-8 text-slate-700">生まれた”余白”で、ご利用者様と向き合う時間を増やし、未来のための新しい取り組みを始めませんか？</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="service" class="py-16 md:py-24 section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold">Assist-Tech Labとは？</h2>
+                    <p class="mt-2 text-slate-600">学んで終わり、じゃない。成果が出るまで伴走するコミュニティです。</p>
+                    <p class="mt-4 max-w-3xl mx-auto text-slate-700">単なるAI学習ツールではありません。皆様の法人に”余白”が生まれるまで、具体的な目標設定とその達成を徹底的にサポートする「目標伴走型コミュニティ」です。</p>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex justify-center border-b border-gray-200 mb-8">
+                        <button data-tab="tab1" class="tab-button tab-active py-4 px-6 block hover:text-teal-700 focus:outline-none border-b-2 font-medium">A. 目標管理</button>
+                        <button data-tab="tab2" class="tab-button py-4 px-6 block hover:text-teal-700 focus:outline-none border-b-2 font-medium">B. AI活用学習</button>
+                        <button data-tab="tab3" class="tab-button py-4 px-6 block hover:text-teal-700 focus:outline-none border-b-2 font-medium">C. コミュニティ</button>
+                    </div>
+
+                    <div id="tab-content" class="bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-stone-200">
+                        <div id="tab1" class="tab-pane active">
+                            <h3 class="font-bold text-xl md:text-2xl text-teal-800 mb-4">結果にコミット！「AI導入伴走支援」</h3>
+                            <p class="text-slate-600">本サービスの最も重要な核。知識を学ぶだけで終わらせず、「業務効率化」という具体的な結果にコミットします。</p>
+                            <ul class="mt-6 space-y-4 text-slate-700">
+                                <li class="flex items-start"><span class="bg-teal-100 text-teal-800 rounded-full w-6 h-6 text-center font-bold mr-3 flex-shrink-0">1</span>独自の「Assist-Tech labシート」を使い、「いつまでに、どの業務を、どれだけ効率化するか」という明確な目標を一緒に設定します。</li>
+                                <li class="flex items-start"><span class="bg-teal-100 text-teal-800 rounded-full w-6 h-6 text-center font-bold mr-3 flex-shrink-0">2</span>2週間に1回30分の個別面談で、進捗確認、悩み相談、次の具体的なアクション設定を繰り返します。</li>
+                                <li class="flex items-start"><span class="bg-teal-100 text-teal-800 rounded-full w-6 h-6 text-center font-bold mr-3 flex-shrink-0">3</span>「忙しくて結局何もできなかった」という事態を防ぎ、着実に成果を生み出します。</li>
+                            </ul>
+                        </div>
+                        <div id="tab2" class="tab-pane hidden">
+                            <h3 class="font-bold text-xl md:text-2xl text-teal-800 mb-4">いつでも学べる動画コンテンツ</h3>
+                            <p class="text-slate-600">福祉の現場で「本当に使える」AI活用法だけを厳選し、短い動画で分かりやすく解説。スマホで隙間時間に学習できます。</p>
+                            <ul class="mt-6 space-y-4 text-slate-700">
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">✔</span>単なる効率化だけでなく、福祉の専門家として守るべき「倫理」についても学べるので、安心して実践できます。</li>
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">✔</span>毎週1本、新しい動画が追加され、常に最新の活用法を学べます。</li>
+                            </ul>
+                        </div>
+                        <div id="tab3" class="tab-pane hidden">
+                             <h3 class="font-bold text-xl md:text-2xl text-teal-800 mb-4">支え合える仲間との文化づくり</h3>
+                            <p class="text-slate-600">月に1回のオンライン交流会などを通じて、同じ志を持つ他の法人の仲間と繋がれます。</p>
+                            <ul class="mt-6 space-y-4 text-slate-700">
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">✔</span>成功事例を共有したり、悩みを相談したりすることで、一人では続かない変革へのモチベーションを維持できます。</li>
+                                <li class="flex items-start"><span class="text-emerald-500 mr-2">✔</span>法人間のつながりや学び合いを促進し、業界全体の発展に貢献します。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="effect" class="py-16 md:py-24 bg-teal-50 section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold">「AI導入伴走」がもたらす具体的な効果</h2>
+                    <p class="mt-2 text-slate-600">例えば、こんな業務がこれだけ変わります。</p>
+                </div>
+                <div class="bg-white p-4 sm:p-8 rounded-2xl shadow-lg border border-stone-200">
+                    <div class="chart-container">
+                        <canvas id="effectChart"></canvas>
+                    </div>
+                </div>
+                 <p class="mt-8 text-center text-slate-600 max-w-3xl mx-auto">一つ一つの業務改善を積み重ね、法人全体の生産性を劇的に向上させます。<br>生まれた時間で、本来注力すべきケアの質の向上や、新しいサービスの検討が可能になります。</p>
+            </div>
+        </section>
+
+        <section id="condition" class="py-16 md:py-24 section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                     <h2 class="text-2xl md:text-3xl font-bold">【重要】変革を成功させるための「参加条件」</h2>
+                    <p class="mt-2 text-slate-600">なぜ「トップと現場担当者のペア参加」が必須なのか？</p>
+                </div>
+                <div class="max-w-4xl mx-auto bg-white p-8 md:p-10 rounded-2xl shadow-lg border border-stone-200">
+                    <p class="text-center text-slate-700">本コミュニティには「1法人様から、必ず経営層の方1名と、現場担当者の方1名の計2名以上でご参加いただく」という重要な参加条件があります。これは単なる制約ではなく、<strong class="text-teal-800">組織全体の変革を本気で成功させるための「鍵」</strong>です。</p>
+                    
+                    <div class="mt-8 grid md:grid-cols-2 gap-8 items-center">
+                        <div class="text-center p-6 bg-red-50 border-2 border-red-200 rounded-lg">
+                            <h4 class="font-bold text-red-700 text-lg mb-2">よくある失敗例</h4>
+                            <p class="text-red-600 text-sm">現場だけが盛り上がっても、経営層の理解がなく予算が下りない。</p>
+                            <div class="text-4xl my-4 text-red-400">...💔...</div>
+                            <p class="text-red-600 text-sm">経営層だけが指示しても、現場の実態に合わず形骸化する。</p>
+                        </div>
+                        <div class="text-center p-6 bg-emerald-50 border-2 border-emerald-200 rounded-lg">
+                            <h4 class="font-bold text-emerald-800 text-lg mb-2">成功への仕組み</h4>
+                            <div class="flex items-center justify-center space-x-4 my-3">
+                                <div class="text-center">
+                                    <div class="bg-teal-200 text-teal-800 rounded-full w-16 h-16 flex items-center justify-center font-bold">トップ</div>
+                                    <p class="text-xs mt-1">経営視点</p>
+                                </div>
+                                <div class="text-2xl font-bold text-slate-500">+</div>
+                                <div class="text-center">
+                                    <div class="bg-amber-200 text-amber-800 rounded-full w-16 h-16 flex items-center justify-center font-bold">現場</div>
+                                    <p class="text-xs mt-1">実態把握</p>
+                                </div>
+                            </div>
+                            <div class="text-3xl my-2 text-emerald-500">⇩</div>
+                            <p class="text-emerald-700 font-bold text-xl">組織全体の変革</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="py-16 md:py-24 bg-teal-50 section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold">ご利用料金プラン</h2>
+                    <p class="mt-2 text-slate-600">法人の状況に合わせて選べる2つのプラン</p>
+                </div>
+                <div class="flex flex-col lg:flex-row justify-center items-center gap-8">
+                    <div class="plan-card w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border-2 border-transparent transition-all duration-300 cursor-pointer">
+                        <h3 class="text-2xl font-bold text-slate-800">Basic 会員</h3>
+                        <p class="text-slate-500 mt-2">まずはAI活用をスモールスタートし、着実に業務改善を進めたい法人様へ</p>
+                        <p class="text-4xl font-bold mt-6">月額 9,900<span class="text-lg ml-1">円</span></p>
+                        <ul class="mt-8 space-y-4 text-slate-700">
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✔</span>動画コンテンツ（毎週1本、計30本）</li>
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✔</span>目標管理と相談（2週間に1回30分）</li>
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✔</span>月1回の交流会</li>
+                            <li class="flex items-center text-slate-400"><span class="mr-3">✖</span>専門家との壁打ち</li>
+                        </ul>
+                    </div>
+                    <div class="plan-card w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border-2 border-transparent transition-all duration-300 cursor-pointer plan-selected">
+                         <div class="text-right"><span class="bg-teal-700 text-white text-xs font-bold px-3 py-1 rounded-full -mt-12 inline-block">おすすめ</span></div>
+                        <h3 class="text-2xl font-bold text-teal-800">Advance 会員</h3>
+                        <p class="text-slate-500 mt-2">外部専門家の視点も取り入れ、一気に変革を加速させたい法人様へ</p>
+                        <p class="text-4xl font-bold text-teal-800 mt-6">月額 33,000<span class="text-lg ml-1">円</span></p>
+                        <ul class="mt-8 space-y-4 text-slate-700">
+                            <li class="flex items-center"><span class="text-emerald-500 mr-3">✔</span>Basic会員の全サービス</li>
+                            <li class="flex items-center font-bold text-teal-800"><span class="text-teal-500 mr-3">★</span>専門家との壁打ち（月1回60分）</li>
+                        </ul>
+                        <p class="mt-4 text-sm bg-teal-50 p-3 rounded-lg text-teal-900">「専門家との壁打ち」では、助成金の活用法、新しい事業モデルの構築、人事評価制度の改定など、より経営に踏み込んだご相談が可能です。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16 md:py-24 text-center section-fade-in">
+            <div class="container mx-auto px-6">
+                <h2 class="text-2xl md:text-3d font-bold">未来への”余白”を、今こそ。</h2>
+                <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
+                    Assist-Tech Labは、AIという道具を「福祉倫理」のもと活用し、皆様の法人に「時間」と「心」の”余白”を生み出します。生まれた”余白”は、職員の皆様が本来やりたかったはずの、温かみのあるケアや、創造的な活動へと繋がります。
+                </p>
+                <p class="mt-6 font-bold text-lg">
+                    私たちと一緒に、人が主役であり続ける、次世代の福祉の形を創っていきませんか？
+                </p>
+                <div class="mt-10">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkzi6SxllWaejYO1aAUpow1TalxpfXAxh7eqrjGQkHV8UhLg/viewform?usp=header" target="_blank" class="bg-teal-700 text-white font-bold py-4 px-8 rounded-lg text-lg hover:bg-teal-800 transition-colors shadow-lg">まずは個別相談会に申し込む</a>
+                    <p class="mt-4 text-sm text-slate-500">皆様の法人が抱える課題について、より詳しくお聞かせください。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>Assist-Tech Lab</p>
+            <p class="text-slate-400 mt-2">&copy; 2025 Assist-Tech Lab. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab-button');
+            const panes = document.querySelectorAll('.tab-pane');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(item => item.classList.remove('tab-active'));
+                    tab.classList.add('tab-active');
+
+                    panes.forEach(pane => {
+                        pane.classList.add('hidden');
+                    });
+                    document.getElementById(tab.dataset.tab).classList.remove('hidden');
+                });
+            });
+
+            const planCards = document.querySelectorAll('.plan-card');
+            planCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    planCards.forEach(c => c.classList.remove('plan-selected'));
+                    card.classList.add('plan-selected');
+                });
+            });
+            
+            const sections = document.querySelectorAll('.section-fade-in');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        if(entry.target.id === 'effect' && !window.effectChartRendered) {
+                            renderEffectChart();
+                            window.effectChartRendered = true;
+                        }
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            function renderEffectChart() {
+                const ctx = document.getElementById('effectChart').getContext('2d');
+                const effectChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['会議の議事録作成', '週次報告書作成', 'シフト希望の集計'],
+                        datasets: [{
+                            label: '改善前 (分)',
+                            data: [60, 45, 30],
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1
+                        }, {
+                            label: '改善後 (分)',
+                            data: [10, 15, 5],
+                            backgroundColor: 'rgba(13, 148, 136, 0.7)', // teal-600
+                            borderColor: 'rgba(15, 118, 110, 1)', // teal-700
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'AI導入による業務時間削減の例',
+                                font: { size: 16 }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw} 分`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '作業時間 (分)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+
