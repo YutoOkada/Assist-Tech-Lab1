@@ -9,10 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Earthy Tones with a Calm Teal Accent -->
-    <!-- Application Structure Plan: プレゼンテーションの流れを踏襲した、縦スクロール型のシングルページアプリケーションを設計。ユーザーが物語を読むように自然に理解を深められる構成とした。1.ヒーローセクションで価値提案、2.課題の可視化、3.AIによる解決策の提示、4.タブ切り替えによるサービス詳細の対話的探索、5.チャートによる効果の定量的証明、6.図解による成功条件の説明、7.インタラクティブな料金表、8.CTAという流れ。この構造は、意思決定者である経営層が論理的に情報を追いやすく、かつ対話的な要素で飽きさせないことを目的としている。 -->
-    <!-- Visualization & Content Choices: 1.業務改善効果(スライド7) -> Goal:効果の定量的理解 -> Viz:棒グラフ(Chart.js) -> Interaction:スクロール連動アニメーション、ツールチップ -> Justification:Before/Afterを視覚的に比較させ、AI導入のインパクトを直感的に伝えるため。 2.参加条件(スライド9) -> Goal:ペア参加の重要性理解 -> Viz:HTML/CSSによる図解 -> Interaction:静的表示 -> Justification:「トップ」と「現場」が揃って初めて「変革」が成功するという構造を、複雑な描画ライブラリなしでシンプルかつ明確に示すため。 -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Noto Sans JP', sans-serif;
@@ -53,14 +49,45 @@
             opacity: 1;
             transform: translateY(0);
         }
+        /* 吹き出しのデザイン用 */
+        .speech-bubble {
+            position: relative;
+            background-color: #f0fdfa; /* teal-50 */
+            border: 1px solid #99f6e4; /* teal-200 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            top: -10px; /* 矢印を上に配置 */
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 10px 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent #f0fdfa transparent;
+        }
+        .speech-bubble-border::after {
+            /* 枠線用の矢印（背景より少し大きく、下にずらす） */
+            content: '';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 11px 11px 11px;
+            border-style: solid;
+            border-color: transparent transparent #99f6e4 transparent;
+            z-index: -1; /* 吹き出しの背景の下に隠す */
+        }
     </style>
 </head>
 <body class="bg-stone-50 text-slate-800">
 
     <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#hero" class="text-teal-700 font-bold text-2xl tracking-wide">
-                Assist-Tech Lab
+            
+            <a href="#hero">
+                <img src="unnamed.png" alt="Assist-Tech Lab Logo" class="h-12 w-auto">
             </a>
             <div>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkzi6SxllWaejYO1aAUpow1TalxpfXAxh7eqrjGQkHV8UhLg/viewform?usp=header" target="_blank" class="bg-teal-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-800 transition-colors">個別相談はこちら</a>
@@ -83,6 +110,53 @@
             </div>
         </section>
 
+        <section id="team" class="py-16 md:py-24 bg-white section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-2xl md:text-3xl font-bold">運営メンバー紹介</h2>
+                    <p class="mt-2 text-slate-600">福祉とAIの専門家があなたの法人をサポートします。</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-10 max-w-5xl mx-auto">
+                    
+                    <div class="text-center flex flex-col items-center">
+                        <div class="w-40 h-40 rounded-full bg-gray-300 flex items-center justify-center text-slate-500 mb-4">(写真)</div>
+                        <h3 class="font-bold text-xl text-teal-800">名前が入ります</h3>
+                        <p class="text-sm text-slate-500 mb-4">役職・肩書</p>
+                        <div class="w-full mt-2 speech-bubble-border">
+                            <div class="speech-bubble">
+                                <p class="text-slate-700 text-sm font-bold">"吹き出しの一言が入ります！"</p>
+                            </div>
+                        </div>
+                        <p class="mt-6 text-sm text-slate-600 text-left">プロフィール文章がここに入ります。経歴やコミュニティへの思いなどを記載します。なぜこのコミュニティを運営しているのか、どんな未来を実現したいのかを語ります。</p>
+                    </div>
+
+                    <div class="text-center flex flex-col items-center">
+                        <div class="w-40 h-40 rounded-full bg-gray-300 flex items-center justify-center text-slate-500 mb-4">(写真)</div>
+                        <h3 class="font-bold text-xl text-teal-800">名前が入ります</h3>
+                        <p class="text-sm text-slate-500 mb-4">役職・肩書</p>
+                        <div class="w-full mt-2 speech-bubble-border">
+                            <div class="speech-bubble">
+                                <p class="text-slate-700 text-sm font-bold">"福祉現場の変革を支援します！"</p>
+                            </div>
+                        </div>
+                        <p class="mt-6 text-sm text-slate-600 text-left">プロフィール文章がここに入ります。経歴やコミュニティへの思いなどを記載します。なぜこのコミュニティを運営しているのか、どんな未来を実現したいのかを語ります。</p>
+                    </div>
+
+                    <div class="text-center flex flex-col items-center">
+                        <div class="w-40 h-40 rounded-full bg-gray-300 flex items-center justify-center text-slate-500 mb-4">(写真)</div>
+                        <h3 class="font-bold text-xl text-teal-800">名前が入ります</h3>
+                        <p class="text-sm text-slate-500 mb-4">役職・肩書</p>
+                        <div class="w-full mt-2 speech-bubble-border">
+                            <div class="speech-bubble">
+                                <p class="text-slate-700 text-sm font-bold">"テクノロジーで「人」を輝かせたい。"</p>
+                            </div>
+                        </div>
+                        <p class="mt-6 text-sm text-slate-600 text-left">プロフィール文章がここに入ります。経歴やコミュニティへの思いなどを記載します。なぜこのコミュニティを運営しているのか、どんな未来を実現したいのかを語ります。</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
         <section id="problem" class="py-16 md:py-24 section-fade-in">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
@@ -133,6 +207,59 @@ A.2週間に1回のAI導入の相談＆目標管理伴走と、B.福祉特化の
 
         <section id="service" class="py-16 md:py-24 section-fade-in">
             <div class="container mx-auto px-6">
+                
+                <div class="max-w-5xl mx-auto bg-white rounded-2xl p-8 md:p-12 mb-16 shadow-lg border border-stone-200">
+                    <h2 class="text-3xl md:text-4xl font-bold text-center text-teal-900 mb-10">私たちが描くビジョン</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-16 h-16 bg-teal-700 text-white font-bold rounded-full flex items-center justify-center text-xl mr-5">
+                                <span class="text-sm font-normal -mt-1 block">Step</span>
+                                <span class="-ml-5 -mt-1 block text-3xl">1</span>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl text-teal-800">福祉人材のAIスキルアップ</h3>
+                                <p class="text-slate-700 mt-1">福祉的配慮を持ったAI活用ができる福祉人材になる</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pl-8 text-4xl text-teal-400">↓</div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-16 h-16 bg-teal-700 text-white font-bold rounded-full flex items-center justify-center text-xl mr-5">
+                                <span class="text-sm font-normal -mt-1 block">Step</span>
+                                <span class="-ml-5 -mt-1 block text-3xl">2</span>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl text-teal-800">法人内部のシフトチェンジ</h3>
+                                <p class="text-slate-700 mt-1">各法人特化の受託AI開発＆導入支援で、法人内部のシフトチェンジ</p>
+                            </div>
+                        </div>
+
+                        <div class="pl-8 text-4xl text-teal-400">↓</div>
+
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-16 h-16 bg-teal-700 text-white font-bold rounded-full flex items-center justify-center text-xl mr-5">
+                                <span class="text-sm font-normal -mt-1 block">Step</span>
+                                <span class="-ml-5 -mt-1 block text-3xl">3</span>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-xl text-teal-800">業界変革の”共創”</h3>
+                                <p class="text-slate-700 mt-1">法人内部でできた”余白”で、福祉業界を変革するような”共創”を発生させたい！</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-10 border-teal-200">
+                    
+                    <div class="text-center">
+                        <p class="text-lg text-slate-700">そしてこの場所から、</p>
+                        <p class="text-2xl md:text-3xl font-bold text-teal-900 mt-3 bg-teal-50 py-4 px-2 rounded-lg">
+                            「利用者、スタッフ、社会。<br class="md:hidden">全方良しの次世代の福祉が生まれる場所」
+                        </p>
+                        <p class="text-lg text-slate-700 mt-3">にします！</p>
+                    </div>
+                </div>
                 <div class="text-center mb-12">
                     <h2 class="text-2xl md:text-3xl font-bold">Assist-Tech Labとは？</h2>
                     <p class="mt-2 text-slate-600">学んで終わり、じゃない。成果が出るまで伴走するコミュニティです。</p>
@@ -177,6 +304,66 @@ A.2週間に1回のAI導入の相談＆目標管理伴走と、B.福祉特化の
             </div>
         </section>
         
+        <section id="case-studies" class="py-16 md:py-24 bg-white section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-2xl md:text-3xl font-bold">導入後のイメージ</h2>
+                    <p class="mt-2 text-slate-600">AI活用がもたらす変化の具体例</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    
+                    <div class="bg-stone-50 rounded-xl shadow-lg border border-stone-200 overflow-hidden flex flex-col">
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl text-red-600 mb-3 text-center">Before</h3>
+                            <div class="w-full h-48 bg-gray-300 rounded-lg flex items-center justify-center text-slate-500 mb-4">(Beforeの画像)</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">【課題】事例1の課題</h4>
+                            <p class="text-sm text-slate-600">ここに導入前の課題が入ります。例えば、「記録業務に毎日1時間かかっていた」など。</p>
+                        </div>
+                        <div class="text-center text-4xl text-teal-500 font-bold my-2">⇓</div>
+                        <div class="p-6 bg-teal-50">
+                            <h3 class="font-bold text-xl text-teal-700 mb-3 text-center">After</h3>
+                            <div class="w-full h-48 bg-gray-300 rounded-lg flex items-center justify-center text-slate-500 mb-4">(Afterの画像)</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">【成果】事例1の成果</h4>
+                            <p class="text-sm text-slate-600">ここに導入後の成果が入ります。例えば、「AI活用で15分に短縮され、利用者と話す時間が増えた」など。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-stone-50 rounded-xl shadow-lg border border-stone-200 overflow-hidden flex flex-col">
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl text-red-600 mb-3 text-center">Before</h3>
+                            <div class="w-full h-48 bg-gray-300 rounded-lg flex items-center justify-center text-slate-500 mb-4">(Beforeの画像)</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">【課題】事例2の課題</h4>
+                            <p class="text-sm text-slate-600">ここに導入前の課題が入ります。例えば、「会議の議事録作成に毎回2時間かかっていた」など。</p>
+                        </div>
+                        <div class="text-center text-4xl text-teal-500 font-bold my-2">⇓</div>
+                        <div class="p-6 bg-teal-50">
+                            <h3 class="font-bold text-xl text-teal-700 mb-3 text-center">After</h3>
+                            <div class="w-full h-48 bg-gray-300 rounded-lg flex items-center justify-center text-slate-500 mb-4">(Afterの画像)</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">【成果】事例2の成果</h4>
+                            <p class="text-sm text-slate-600">ここに導入後の成果が入ります。例えば、「AIの自動要約で30分に短縮。決定事項の共有もスムーズになった」など。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-stone-50 rounded-xl shadow-lg border border-stone-200 overflow-hidden flex flex-col">
+                        <div class="p-6">
+                            <h3 class="font-bold text-xl text-red-600 mb-3 text-center">Before</h3>
+                            <div class="w-full h-48 bg-gray-300 rounded-lg flex items-center justify-center text-slate-500 mb-4">(Beforeの画像)</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">【課題】事例3の課題</h4>
+                            <p class="text-sm text-slate-600">ここに導入前の課題が入ります。例えば、「シフト希望の集計と調整がアナログで半日仕事だった」など。</p>
+                        </div>
+                        <div class="text-center text-4xl text-teal-500 font-bold my-2">⇓</div>
+                        <div class="p-6 bg-teal-50">
+                            <h3 class="font-bold text-xl text-teal-700 mb-3 text-center">After</h3>
+                            <div class="w-full h-48 bg-gray-300 rounded-lg flex items-center justify-center text-slate-500 mb-4">(Afterの画像)</div>
+                            <h4 class="font-bold text-lg text-slate-800 mb-2">【成果】事例3の成果</h4>
+                            <p class="text-sm text-slate-600">ここに導入後の成果が入ります。例えば、「AIチャットボットで自動集計。1時間で調整まで完了するようになった」など。</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
         <section id="effect" class="py-16 md:py-24 bg-teal-50 section-fade-in">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
